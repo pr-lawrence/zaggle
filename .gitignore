@@ -5,4 +5,5 @@ target
 /.classpath
 /.project
 /.settings
+/.gradle
 /RUNNING_PID
