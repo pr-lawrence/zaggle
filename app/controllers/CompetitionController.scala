@@ -29,13 +29,12 @@ class CompetitionController @Inject()(cc: ControllerComponents, competitionServi
   }
 
   /**
-    * Competition
-    * z
+    * get Competition
     *
     * @param id
     * @return
     */
-  def get(id: String) = Action(parse.json) { implicit request =>
+  def get(id: String) = Action { implicit request =>
     val maybeCompetition = competitionService.findById(id)
     maybeCompetition match {
       case Some(competition) =>

@@ -20,6 +20,7 @@ class CompetitionRepository {
   def select(): List[Competition] = mock
 
   def findById(id: String): Option[Competition] = {
+    println(id)
     mock.find(_.competId == id)
   }
 }
