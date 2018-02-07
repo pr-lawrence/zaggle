@@ -12,7 +12,7 @@ import play.api.mvc._
   * @note: Monitoring Controller
   * @version: 0.1.0
   */
-@Api
+@Api(value="Monitoring")
 @Singleton
 class HelloController @Inject()(cc: ControllerComponents) extends AbstractController(cc) {
 

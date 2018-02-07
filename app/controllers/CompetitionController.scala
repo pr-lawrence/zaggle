@@ -2,40 +2,45 @@ package controllers
 
 import javax.inject._
 
-import io.swagger.annotations.Api
-import models.competition.CompetitionRepository
+import io.swagger.annotations.{Api, ApiOperation}
+import models.competition.{Competition, CompetitionRepository}
 import play.api.libs.json.Json
 import play.api.mvc._
+import services.competition.CompetitionService
+
+import scala.concurrent.{ExecutionContext, Future}
+
 
 /**
   *
   * @author: Lawrence
   * @since: 2018. 2. 4.
-  * @note:
+  * @note: Competition Controller
   * @version: 0.1.0
   */
-@Api
+@Api(value = "Competition")
 @Singleton
-class CompetitionController @Inject()(cc: ControllerComponents, competitionService: CompetitionRepository) extends AbstractController(cc) {
+class CompetitionController @Inject()(cc: ControllerComponents, competitionService: CompetitionService, competitionRepository: CompetitionRepository)(implicit ec: ExecutionContext) extends AbstractController(cc) {
 
-  /**
-    * list of Competition
-    *
-    * @return
-    */
-  def list() = Action { implicit request =>
-    val competitions = competitionService.select()
-    Ok(Json.toJson(competitions))
+  @ApiOperation(value = "Finds Pets by status",
+    notes = "Multiple status values can be provided with comma seperated strings",
+    response = classOf[Competition],
+    responseContainer = "List")
+  def list() = Action.async { implicit request =>
+    //    val competitions = competitionService.list()
+    val competitions = competitionRepository.list()
+
+    competitions.map { comps =>
+      Ok(Json.toJson(comps))
+    }
   }
 
-  /**
-    * get Competition
-    *
-    * @param id
-    * @return
-    */
+  @ApiOperation(value = "Finds Pets by status",
+    notes = "Multiple status values can be provided with comma seperated strings",
+    response = classOf[Competition],
+    responseContainer = "List")
   def get(id: String) = Action { implicit request =>
-    val maybeCompetition = competitionService.findById(id)
+    val maybeCompetition = competitionService.get(id)
     maybeCompetition match {
       case Some(competition) =>
         Ok(Json.toJson(competition))
