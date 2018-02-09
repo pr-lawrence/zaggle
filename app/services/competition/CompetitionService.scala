@@ -13,6 +13,7 @@ import models.competition.{Competition, CompetitionRepository}
 @Singleton
 class CompetitionService @Inject() (repos: CompetitionRepository){
 
+/**
   def list(): List[Competition] = {
     repos.select()
   }
@@ -20,4 +21,5 @@ class CompetitionService @Inject() (repos: CompetitionRepository){
   def get(id: String): Option[Competition] = {
     repos.findById(id)
   }
+  */
 }

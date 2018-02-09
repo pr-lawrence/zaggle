@@ -11,10 +11,10 @@ import play.api.libs.functional.syntax._
   *
   * @author: Lawrence
   * @since: 2018. 2. 4.
-  * @note:
+  * @note: Competiton Data
   * @version: 0.1.0
   */
-case class Competition(competId: String,
+case class Competition(competId: Long,
                        examinerId: String,
                        headline: String,
                        description: String,
@@ -28,7 +28,7 @@ object Competition {
 
   //  implicit val format = Json.format[Competition]
   implicit val format: Format[Competition] = (
-    (JsPath \ "competId").format[String] and
+    (JsPath \ "competId").format[Long] and
       (JsPath \ "examinerId").format[String] and
       (JsPath \ "headline").format[String] and
       (JsPath \ "description").format[String] and
