@@ -65,7 +65,7 @@ class CompetitionOverviewRepository @Inject()(dbConfigProvider: DatabaseConfigPr
     competitionOverview.result
   }
 
-  def getByCompetitionId(id: Long) = db.run {
+  def getByCompetitionId(id: Long): Future[Seq[CompetitionOverview]] = db.run {
     competitionOverview.filter(_.competitionId === id).result
   }
 }

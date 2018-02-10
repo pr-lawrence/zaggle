@@ -6,9 +6,8 @@ import io.swagger.annotations.{Api, ApiOperation}
 import models.competition.{Competition, CompetitionOverviewRepository, CompetitionRepository}
 import play.api.libs.json.Json
 import play.api.mvc._
-import services.competition.CompetitionService
 
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent._
 
 
 /**
@@ -25,43 +24,34 @@ class CompetitionController @Inject()(cc: ControllerComponents,
                                       competitionOverviewRepository: CompetitionOverviewRepository)
                                      (implicit ec: ExecutionContext) extends AbstractController(cc) {
 
-  @ApiOperation(value = "Finds Pets by status",
-    notes = "Multiple status values can be provided with comma seperated strings",
+  @ApiOperation(value = "List of Competition",
+    notes = "Competition 리스트 정보를 반환한다.",
     response = classOf[Competition],
     responseContainer = "List")
   def list() = Action.async { implicit request =>
     //    val competitions = competitionService.list()
-
-
     competitionRepository.list().map { competitions =>
       Ok(Json.toJson(competitions))
     }
   }
 
-  @ApiOperation(value = "Finds Pets by status",
-    notes = "Multiple status values can be provided with comma seperated strings",
-    response = classOf[Competition],
-    responseContainer = "List")
+  @ApiOperation(value = "Competition",
+    notes = "Competition을 반환한다.",
+    response = classOf[Competition])
   def get(id: Long) = Action.async { implicit request =>
-
-    /**
-      * val maybeCompetition = competitionService.get(id)
-      * maybeCompetition match {
-      * case Some(competition) =>
-      * Ok(Json.toJson(competition))
-      * case _ =>
-      * NotFound
-      * }
-      */
-
     competitionRepository.get(id).map { competitions =>
-      Ok(Json.toJson(competitions))
+      Ok(Json.toJson(competitions.head))
     }
   }
 
-
+  @ApiOperation(value = "Overview of Competition",
+    notes = "Competition의 Overview를 반환한다.",
+    response = classOf[Competition],
+    responseContainer = "List")
   def getOverview(id: Long) = Action.async { implicit request =>
-    competitionOverviewRepository.list()
+    competitionOverviewRepository.getByCompetitionId(id).map { competitionOverview =>
+      Ok(Json.toJson(competitionOverview.head))
+    }
   }
 
 }

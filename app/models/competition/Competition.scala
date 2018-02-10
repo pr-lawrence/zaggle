@@ -2,7 +2,6 @@ package models.competition
 
 import java.time.LocalDateTime
 
-import models.competition.CompetitionStateType.{CompetitionStateType, _}
 import play.api.libs.json._
 import play.api.libs.json.Reads._
 import play.api.libs.functional.syntax._

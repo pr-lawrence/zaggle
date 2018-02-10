@@ -2,6 +2,7 @@ package models.competition
 
 import java.time.LocalDateTime
 
+import play.api.libs.json._
 /**
   *
   * @author: Lawrence
@@ -17,3 +18,7 @@ case class CompetitionOverview(competitionOverviewId: Long,
                                kernelsFaq: String,
                                timeline: String,
                                regiDate: LocalDateTime = LocalDateTime.now)
+
+object CompetitionOverview {
+  implicit val format = Json.format[CompetitionOverview]
+}
