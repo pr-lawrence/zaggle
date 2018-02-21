@@ -5,10 +5,9 @@ import play.api.libs.json.Reads._
 import play.api.libs.functional.syntax._
 
 /**
-  *
-  * @author: Lawrence
-  * @since: 2018. 2. 5.
-  * @note:
+  * @author Lawrence
+  * @since 2018. 2. 5.
+  * @note
   */
 object EnumUtils {
   def enumReads[E <: Enumeration](enum: E): Reads[E#Value] = new Reads[E#Value] {

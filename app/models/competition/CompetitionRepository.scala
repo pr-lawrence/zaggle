@@ -10,11 +10,10 @@ import slick.jdbc.JdbcProfile
 import scala.concurrent._
 
 /**
-  *
-  * @author: Lawrence
-  * @since: 2018. 2. 4.
-  * @note:
-  * @version: 0.1.0
+  * @author Lawrence
+  * @since 2018. 2. 4.
+  * @note
+  * @version 0.1.0
   */
 @Singleton
 class CompetitionRepository @Inject()(dbConfigProvider: DatabaseConfigProvider)(implicit ec: ExecutionContext) {

@@ -8,9 +8,9 @@ import scala.concurrent.{ExecutionContext, Future}
 
 /**
   *
-  * @author: Lawrence
-  * @since: 2018. 2. 4.
-  * @note:
+  * @author Lawrence
+  * @since 2018. 2. 4.
+  * @note
   */
 
 class LoggingFilter @Inject() (implicit val mat: Materializer, ec: ExecutionContext) extends Filter {

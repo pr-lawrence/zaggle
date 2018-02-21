@@ -8,10 +8,10 @@ import play.api.libs.functional.syntax._
 
 /**
   *
-  * @author: Lawrence
-  * @since: 2018. 2. 4.
-  * @note: Competiton Data
-  * @version: 0.1.0
+  * @author Lawrence
+  * @since 2018. 2. 4.
+  * @note Competiton Data
+  * @version 0.1.0
   */
 case class Competition(competId: Long,
                        examinerId: String,

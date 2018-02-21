@@ -10,11 +10,10 @@ import slick.jdbc.JdbcProfile
 import scala.concurrent.{ExecutionContext, Future}
 
 /**
-  *
-  * @author: Lawrence
-  * @since: 2018. 2. 9.
-  * @note:
-  * @version: 0.1.0
+  * @author Lawrence
+  * @since 2018. 2. 9.
+  * @note
+  * @version 0.1.0
   */
 @Singleton
 class CompetitionOverviewRepository @Inject()(dbConfigProvider: DatabaseConfigProvider)(implicit ec: ExecutionContext) {

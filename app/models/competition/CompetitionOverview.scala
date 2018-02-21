@@ -5,10 +5,10 @@ import java.time.LocalDateTime
 import play.api.libs.json._
 /**
   *
-  * @author: Lawrence
-  * @since: 2018. 2. 9.
-  * @note: Competition Overview
-  * @version: 0.1.0
+  * @author Lawrence
+  * @since 2018. 2. 9.
+  * @note Competition Overview
+  * @version 0.1.0
   */
 case class CompetitionOverview(competitionOverviewId: Long,
                                competitionId: Long,

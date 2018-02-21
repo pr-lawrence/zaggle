@@ -4,11 +4,10 @@ import play.api.libs.json._
 import play.api.libs.functional.syntax._
 
 /**
-  *
-  * @author: Lawrence
-  * @since: 2018. 2. 5.
-  * @note:
-  * @version: 0.1.0
+  * @author Lawrence
+  * @since 2018. 2. 5.
+  * @note
+  * @version 0.1.0
   */
 
 object CompetitionStateType {
