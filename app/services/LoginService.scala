@@ -2,6 +2,7 @@ package services
 
 import javax.inject.{Inject, Singleton}
 
+import common.CryptoUtils
 import models.authentication.{LoginRequest, User, UserRepository}
 
 import scala.concurrent.{Future, Promise}
@@ -17,6 +18,7 @@ import scala.concurrent.{Future, Promise}
 class LoginService @Inject()(userRepository: UserRepository){
 
   def login(loginRequest: LoginRequest): Future[Option[User]] = {
-    userRepository.getByLogin(loginRequest.id, loginRequest.password)
+    val hashedPassword: String = CryptoUtils.sha256Hash(loginRequest.password)
+    userRepository.getByLogin(loginRequest.id, hashedPassword)
   }
 }

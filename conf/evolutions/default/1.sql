@@ -40,7 +40,7 @@ create table "user" (
   "edit_date" date
 );
 
-insert into "user" values(1, 'qqq', '123456', sysdate, null);
+insert into "user" values(1, 'qqq', '8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92', sysdate, null);
 
 # --- !Downs
 

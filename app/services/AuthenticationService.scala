@@ -14,7 +14,7 @@ import scala.concurrent.ExecutionContext.Implicits.global
   * @author Lawrence
   * @since 2018. 2. 21.
   * @note
-  * @version
+  * @version 0.1.1
   */
 @Singleton
 class AuthenticationService @Inject()(userRepository: UserRepository,
@@ -24,7 +24,6 @@ class AuthenticationService @Inject()(userRepository: UserRepository,
     loginService.login(loginRequest).map(userOpt =>
       userOpt match {
         case Some(user) =>
-
           val jsObject = JsObject(Seq("userId" -> JsNumber(user.userId),
             "loginId" -> JsString(user.loginId)))
 
