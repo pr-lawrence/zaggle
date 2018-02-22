@@ -17,6 +17,10 @@ GET         /competition                     controllers.CompetitionController.l
 GET         /competition/:id                 controllers.CompetitionController.get(id: Long)
 GET         /competition/:id/overview        controllers.CompetitionController.getOverview(id: Long)
 
+# Authentication
+
+POST        /auth/local controllers.AuthenticationController.local
+
 
 # Map static resources from the /public folder to the /assets URL path
 GET         /assets/*file                    controllers.Assets.versioned(path="/public", file: Asset)
