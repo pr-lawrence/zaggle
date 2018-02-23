@@ -1,8 +1,8 @@
 /**
   *
-  * @author: Lawrence
-  * @since: 2018. 2. 4.
-  * @note:
+  * @author Lawrence
+  * @since 2018. 2. 4.
+  * @note
   */
 import javax.inject.Inject
 
