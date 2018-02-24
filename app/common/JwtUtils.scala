@@ -3,12 +3,12 @@ package common
 import java.time.{LocalDateTime, ZoneId}
 import java.util.Date
 
-import com.typesafe.config.{Config, ConfigFactory}
-import models.authentication.AuthToken
+import com.typesafe.config._
 import pdi.jwt._
 import play.api.libs.json._
 
 import scala.concurrent.duration._
+import scala.util.Try
 /**
   *
   * @author Lawrence
@@ -34,6 +34,10 @@ object JwtUtils{
 
   private def encode(claims: JsObject, options: JsObject): String = {
     JwtJson.encode(claims.deepMerge(options), KEY, ALGORITHM)
+  }
+
+  def decode(token:String): Try[JwtClaim] = {
+    JwtJson.decode(token, KEY, Seq(ALGORITHM))
   }
 
   private def JWT_OPTION: JsObject = {

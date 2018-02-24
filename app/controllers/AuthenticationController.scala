@@ -20,6 +20,10 @@ import scala.concurrent.ExecutionContext.Implicits.global
 @Singleton
 class AuthenticationController @Inject()(cc: ControllerComponents, authenticationService : AuthenticationService) extends AbstractController(cc) {
 
+  /**
+    * basic login
+    * @return
+    */
   def local = Action.async(parse.json) { request: Request[JsValue] =>
     request.body.asOpt[LoginRequest] match {
       case Some(loginRequest) =>
@@ -31,4 +35,5 @@ class AuthenticationController @Inject()(cc: ControllerComponents, authenticatio
         Future(BadRequest(""))
     }
   }
+
 }
