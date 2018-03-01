@@ -8,6 +8,7 @@ lazy val root = (project in file(".")).enablePlugins(PlayScala, SwaggerPlugin) /
 scalaVersion := "2.12.3"
 
 libraryDependencies += guice
+libraryDependencies += ws
 
 libraryDependencies ++= Seq(
   "io.swagger" %% "swagger-play2" % "1.6.1-SNAPSHOT",

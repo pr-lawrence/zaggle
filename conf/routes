@@ -19,6 +19,7 @@ GET         /competition/:id/overview        controllers.CompetitionController.g
 
 # Authentication
 POST        /auth/local                      controllers.AuthenticationController.local
+POST        /auth/github                     controllers.AuthenticationController.loginUsingGithub
 
 # Account
 GET         /api/me                          controllers.AccountController.me

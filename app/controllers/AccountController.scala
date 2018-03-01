@@ -18,8 +18,7 @@ class AccountController @Inject()(cc: ControllerComponents, authorizedAction: Au
                                  ) extends AbstractController(cc) {
 
   def me() = authorizedAction { request =>
-//    Logger.info(s"${request.attrs}")
-//    Logger.info(s"${request.attrs.get(TypedKey("a"))}")
+    Logger.info(s"${request.attrs.get(AuthorizedAction.JWT_KEY)}")
     Ok("Hello")
   }
 }

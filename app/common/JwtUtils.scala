@@ -25,11 +25,11 @@ object JwtUtils{
   private val BASIC_EXPIRY_TIME = 10 minutes
 
   def tokenOf(datas: Map[String, String]): String= {
-    encode(Json.toJsObject(datas), JWT_OPTION)
+    encode(Json.toJsObject(datas), JWT_DEFAULT_OPTION)
   }
 
   def tokenOf(jsObject: JsObject): String = {
-    encode(jsObject, JWT_OPTION)
+    encode(jsObject, JWT_DEFAULT_OPTION)
   }
 
   private def encode(claims: JsObject, options: JsObject): String = {
@@ -40,11 +40,19 @@ object JwtUtils{
     JwtJson.decode(token, KEY, Seq(ALGORITHM))
   }
 
-  private def JWT_OPTION: JsObject = {
+  /**
+    * jwt default option
+    * @return
+    */
+  private def JWT_DEFAULT_OPTION: JsObject = {
     JsObject(Seq(
       "iss" -> JsString("zaggle"),
-      "exp" -> JsNumber(Date.from(LocalDateTime.now.plusMinutes(BASIC_EXPIRY_TIME.length).atZone(ZoneId.systemDefault).toInstant).getTime),
+      "exp" -> JsNumber(ldtAfter(LocalDateTime.now, BASIC_EXPIRY_TIME).getTime),
       "sub" -> JsString("access")
     ))
+  }
+
+  private def ldtAfter(ldt: LocalDateTime, afterMinutes: FiniteDuration): Date = {
+    Date.from(ldt.plusMinutes(afterMinutes.length).atZone(ZoneId.systemDefault).toInstant)
   }
 }

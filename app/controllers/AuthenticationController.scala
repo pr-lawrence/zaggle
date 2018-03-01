@@ -36,4 +36,17 @@ class AuthenticationController @Inject()(cc: ControllerComponents, authenticatio
     }
   }
 
+
+  def loginUsingGithub = Action.async(parse.json) { request: Request[JsValue] =>
+    request.body.asOpt[GithubLoginRequest] match {
+      case Some(request) =>
+        authenticationService.githubLogin(request).map { authOpt =>
+          if( authOpt.isDefined) Ok(Json.toJson(authOpt.get))
+          else BadRequest("")
+        }
+      case _ =>
+        Future(BadRequest(""))
+      }
+  }
+
 }
