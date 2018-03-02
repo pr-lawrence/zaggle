@@ -8,3 +8,5 @@ target
 /.settings
 /.gradle
 /RUNNING_PID
+
+conf/application.conf

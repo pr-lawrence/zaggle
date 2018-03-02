@@ -13,6 +13,8 @@ import play.api.libs.json._
 case class GithubOauthRequest (clientId: String, clientSecret: String, code: String)
 
 object GithubOauthRequest {
+  // camel case to snake case.
+  // clientId => client_id
   implicit val config = JsonConfiguration(SnakeCase)
   implicit val format = Json.format[GithubOauthRequest]
 }
