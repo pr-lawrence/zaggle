@@ -87,7 +87,7 @@ class AuthenticationService @Inject()(ws: WSClient,
     } yield {
       userOpt match {
         case Some(user) =>
-          val jsObject = Json.toJson(user).as[JsObject]
+          val jsObject = Json.toJson(ZaggleRequestContext(user.id, user.login)).as[JsObject]
           val accessToken = JwtUtils.tokenOf(jsObject)
           val refreshToken = ""
 

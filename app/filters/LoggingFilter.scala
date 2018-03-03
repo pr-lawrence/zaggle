@@ -1,9 +1,13 @@
 package filters
 
 import javax.inject._
+
 import akka.stream.Materializer
+import akka.util.ByteString
 import play.api.Logger
+import play.api.libs.streams.Accumulator
 import play.api.mvc._
+
 import scala.concurrent.{ExecutionContext, Future}
 
 /**
@@ -13,21 +17,24 @@ import scala.concurrent.{ExecutionContext, Future}
   * @note
   */
 
-class LoggingFilter @Inject() (implicit val mat: Materializer, ec: ExecutionContext) extends Filter {
+class LoggingFilter @Inject() (implicit ec: ExecutionContext) extends EssentialFilter {
+  def apply(nextFilter: EssentialAction) = new EssentialAction {
+    def apply(requestHeader: RequestHeader) = {
 
-  def apply(nextFilter: RequestHeader => Future[Result])
-           (requestHeader: RequestHeader): Future[Result] = {
+      val startTime = System.currentTimeMillis
 
-    val startTime = System.currentTimeMillis
+      val accumulator: Accumulator[ByteString, Result] = nextFilter(requestHeader)
 
-    nextFilter(requestHeader).map { result =>
+      accumulator.map { result =>
 
-      val endTime = System.currentTimeMillis
-      val requestTime = endTime - startTime
+        val endTime = System.currentTimeMillis
+        val requestTime = endTime - startTime
 
-      Logger.info(s"${requestHeader.method} ${requestHeader.uri} took ${requestTime}ms and returned ${result.header.status}")
+        Logger.info(s"${requestHeader.method} ${requestHeader.uri} took ${requestTime}ms and returned ${result.header.status}")
 
-      result.withHeaders("Request-Time" -> requestTime.toString)
+        result.withHeaders("Request-Time" -> requestTime.toString)
+
+      }
     }
   }
 }

@@ -22,7 +22,7 @@ POST        /auth/local                      controllers.AuthenticationControlle
 POST        /auth/github                     controllers.AuthenticationController.loginUsingGithub
 
 # Account
-GET         /api/me                          controllers.AccountController.me
+GET         /api/account/me                  controllers.AccountController.me
 
 
 
