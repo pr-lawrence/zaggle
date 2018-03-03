@@ -62,18 +62,19 @@ class AuthenticationService @Inject()(ws: WSClient,
         .post(Json.toJson(GithubOauthRequest(GITHUB_CLIENT_ID, GITHUB_CLIENT_SECRET, githubLoginRequest.code)))
         .map { response =>
           if( response.status != 200 ) None
+          else if ( response.body.contains("error") ) None
           else Some(response.body.split("&").map(_.split("=")).filter(_ (0) == "access_token").head(1))
         }
     }
 
-    def getUser(tokenOpt: Option[String]): Future[Option[String]] = {
+    def getUser(tokenOpt: Option[String]): Future[Option[GithubUser]] = {
       tokenOpt match {
         case Some(token) =>
           ws.url("https://api.github.com/user")
             .withHttpHeaders("Authorization" -> s"token ${token}")
             .get()
             .map { response =>
-              Some(response.body)
+              Some(Json.parse(response.body).as[GithubUser])
             }
         case _ =>
           Future(None)
@@ -86,7 +87,7 @@ class AuthenticationService @Inject()(ws: WSClient,
     } yield {
       userOpt match {
         case Some(user) =>
-          val jsObject = Json.parse(user).as[JsObject]
+          val jsObject = Json.toJson(user).as[JsObject]
           val accessToken = JwtUtils.tokenOf(jsObject)
           val refreshToken = ""
 
@@ -96,5 +97,4 @@ class AuthenticationService @Inject()(ws: WSClient,
       }
     }
   }
-
 }
