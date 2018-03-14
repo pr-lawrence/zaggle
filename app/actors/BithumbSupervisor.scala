@@ -9,12 +9,11 @@ package actors
   */
 
 import akka.actor._
-import play.api.Logger
 
 import scala.concurrent.duration._
 
-object BithumbActor {
-  def props = Props[BithumbActor]
+object BithumbSupervisor {
+  def props = Props[BithumbSupervisor]
 
 
   sealed trait BithymbActorCommand
@@ -22,14 +21,14 @@ object BithumbActor {
   case class SayHello(name: String) extends BithymbActorCommand
 }
 
-class BithumbActor extends Actor {
+class BithumbSupervisor extends Actor with ActorLogging {
 
-  import BithumbActor._
+  import BithumbSupervisor._
   import context.dispatcher
 
   override def preStart(): Unit = {
     println("I'm alive!")
-    context.system.scheduler.schedule(0 seconds, 1 seconds)( self ! Tick)
+    context.actorOf(BithumbCrawler.props)
   }
 
   def receive = {

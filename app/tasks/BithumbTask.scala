@@ -2,7 +2,7 @@ package tasks
 
 import javax.inject._
 
-import actors.BithumbActor
+import actors.BithumbSupervisor
 import akka.actor._
 
 import scala.concurrent.ExecutionContext
@@ -18,6 +18,6 @@ import scala.concurrent.duration._
 @Singleton
 class BithumbTask @Inject()(actorSystem: ActorSystem)(implicit executionContext: ExecutionContext) {
   actorSystem.scheduler.scheduleOnce(delay = 0 seconds) {
-    actorSystem.actorOf(Props(classOf[BithumbActor]))
+    actorSystem.actorOf(Props(classOf[BithumbSupervisor]))
   }
 }

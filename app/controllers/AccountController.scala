@@ -15,11 +15,12 @@ import play.api.libs.json.Json
   * @version 0.1.1
   */
 @Singleton
-class AccountController @Inject()(cc: ControllerComponents, authorizedAction: AuthorizedAction,
+class AccountController @Inject()(cc: ControllerComponents,
+                                  authorizedAction: AuthorizedAction,
                                  ) extends AbstractController(cc) {
 
   def me() = authorizedAction { request =>
-//    Logger.info(s"${request.attrs.get(AuthorizedAction.JWT_KEY)}")
+    //    Logger.info(s"${request.attrs.get(AuthorizedAction.JWT_KEY)}")
 
     val reqContextOpt = request.attrs.get(AuthorizedAction.JWT_KEY)
 
