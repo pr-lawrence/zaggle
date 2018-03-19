@@ -43,7 +43,7 @@ class BithumbApi @Inject()(ws: WSClient)(implicit ec: ExecutionContext) {
     * TYPE : Public
     * NOTE : bithumb 거래소 마지막 거래 정보
     */
-  def tickerAll(): Future[TickerAll] = {
+  def tickerAll: Future[TickerAll] = {
     val api = List(baseUrl, "public/ticker/ALL").mkString("/")
 
     ws.url(api)

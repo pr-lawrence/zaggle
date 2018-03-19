@@ -5,6 +5,7 @@ import javax.inject.Inject
 import akka.actor.{Actor, Cancellable, Props}
 import play.api.Logger
 import play.api.libs.ws.WSClient
+import services.BithumbApi
 
 import scala.concurrent.duration._
 
@@ -17,17 +18,16 @@ import scala.concurrent.duration._
   */
 
 object BithumbCrawler {
-  def props = Props[BithumbCrawler]
+  def props = Props(classOf[BithumbCrawler])
 
   sealed trait BithumbCrawlerCommand
 
   case object Tick extends BithumbCrawlerCommand
   case object Start extends BithumbCrawlerCommand
   case object Stop extends BithumbCrawlerCommand
-
 }
 
-class BithumbCrawler @Inject() (ws: WSClient) extends Actor {
+class BithumbCrawler @Inject() (bithumbApi: BithumbApi) extends Actor {
 
   import BithumbCrawler._
   import context.dispatcher
@@ -36,7 +36,7 @@ class BithumbCrawler @Inject() (ws: WSClient) extends Actor {
 
   def receive = {
     case Tick =>
-      Console.println(ws)
+      bithumbApi.tickerAll.map(println)
     case Start =>
       cancellable.isCancelled match {
         case true =>

@@ -2,6 +2,7 @@ package controllers
 
 import javax.inject._
 
+import akka.actor.ActorRef
 import io.swagger.annotations.Api
 import models.bithumb.TickerAll
 import play.api.Logger
@@ -24,7 +25,7 @@ class HelloController @Inject()(cc: ControllerComponents, bithumbApi: BithumbApi
 
   def l7check() = Action {
 
-    val eventualAll: Future[TickerAll] = bithumbApi.tickerAll()
+    val eventualAll: Future[TickerAll] = bithumbApi.tickerAll
 
     eventualAll.map( s =>
       Logger.info(s"$s")
