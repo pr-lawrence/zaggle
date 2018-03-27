@@ -1,5 +1,6 @@
 package services
 
+import java.time.LocalDateTime
 import javax.inject.{Inject, Singleton}
 
 import com.typesafe.config.ConfigFactory
@@ -49,25 +50,28 @@ class BithumbApi @Inject()(ws: WSClient)(implicit ec: ExecutionContext) {
     ws.url(api)
       .get()
       .map { response =>
+
+
         val jValue: JsValue = Json.parse(response.body)
         val status: String = (jValue \ "status").as[String]
         val date: String = (jValue \ "data" \ "date").as[String]
 
-
         (jValue \ "data" \ "BTC").as[TickerWithoutDate]
+
+        val now = LocalDateTime.now
 
         TickerAll(status,
           Map(
-            "BTC" -> TickerData.from((jValue \ "data" \ "BTC").as[TickerWithoutDate], date),
-            "ETH" -> TickerData.from((jValue \ "data" \ "ETH").as[TickerWithoutDate], date),
-            "DASH" -> TickerData.from((jValue \ "data" \ "DASH").as[TickerWithoutDate], date),
-            "LTC" -> TickerData.from((jValue \ "data" \ "LTC").as[TickerWithoutDate], date),
-            "ETC" -> TickerData.from((jValue \ "data" \ "ETC").as[TickerWithoutDate], date),
-            "XRP" -> TickerData.from((jValue \ "data" \ "XRP").as[TickerWithoutDate], date),
-            "BCH" -> TickerData.from((jValue \ "data" \ "BCH").as[TickerWithoutDate], date),
-            "XMR" -> TickerData.from((jValue \ "data" \ "XMR").as[TickerWithoutDate], date),
-            "ZEC" -> TickerData.from((jValue \ "data" \ "ZEC").as[TickerWithoutDate], date),
-            "QTUM" -> TickerData.from((jValue \ "data" \ "QTUM").as[TickerWithoutDate], date)))
+            "BTC" -> TickerData.from((jValue \ "data" \ "BTC").as[TickerWithoutDate], now),
+            "ETH" -> TickerData.from((jValue \ "data" \ "ETH").as[TickerWithoutDate], now),
+            "DASH" -> TickerData.from((jValue \ "data" \ "DASH").as[TickerWithoutDate], now),
+            "LTC" -> TickerData.from((jValue \ "data" \ "LTC").as[TickerWithoutDate], now),
+            "ETC" -> TickerData.from((jValue \ "data" \ "ETC").as[TickerWithoutDate], now),
+            "XRP" -> TickerData.from((jValue \ "data" \ "XRP").as[TickerWithoutDate], now),
+            "BCH" -> TickerData.from((jValue \ "data" \ "BCH").as[TickerWithoutDate], now),
+            "XMR" -> TickerData.from((jValue \ "data" \ "XMR").as[TickerWithoutDate], now),
+            "ZEC" -> TickerData.from((jValue \ "data" \ "ZEC").as[TickerWithoutDate], now),
+            "QTUM" -> TickerData.from((jValue \ "data" \ "QTUM").as[TickerWithoutDate], now)))
 
       }
   }

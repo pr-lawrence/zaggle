@@ -1,5 +1,7 @@
 package models.bithumb
 
+import java.time.LocalDateTime
+
 import play.api.libs.json._
 import play.api.libs.functional.syntax._
 
@@ -31,32 +33,32 @@ import play.api.libs.functional.syntax._
 */
 
 case class TickerData(
-                       openingPrice: String,
-                       closingPrice: String,
-                       minPrice: String,
-                       maxPrice: String,
-                       averagePrice: String,
-                       unitsTraded: String,
-                       volume1day: String,
-                       volume7day: String,
-                       buyPrice: String,
-                       sellPrice: String,
-                       date: String
+                       openingPrice: Long,
+                       closingPrice: Long,
+                       minPrice: Long,
+                       maxPrice: Long,
+                       averagePrice: Double,
+                       unitsTraded: Double,
+                       volume1day: Double,
+                       volume7day: Double,
+                       buyPrice: Long,
+                       sellPrice: Long,
+                       date: LocalDateTime
                      )
 
 object TickerData {
-  def from(tickerWithoutDate: TickerWithoutDate, date: String): TickerData = {
+  def from(tickerWithoutDate: TickerWithoutDate, date: LocalDateTime): TickerData = {
     TickerData(
-      tickerWithoutDate.openingPrice,
-      tickerWithoutDate.closingPrice,
-      tickerWithoutDate.minPrice,
-      tickerWithoutDate.maxPrice,
-      tickerWithoutDate.averagePrice,
-      tickerWithoutDate.unitsTraded,
-      tickerWithoutDate.volume1day,
-      tickerWithoutDate.volume7day,
-      tickerWithoutDate.buyPrice,
-      tickerWithoutDate.sellPrice,
+      tickerWithoutDate.openingPrice.toLong,
+      tickerWithoutDate.closingPrice.toLong,
+      tickerWithoutDate.minPrice.toLong,
+      tickerWithoutDate.maxPrice.toLong,
+      tickerWithoutDate.averagePrice.toDouble,
+      tickerWithoutDate.unitsTraded.toDouble,
+      tickerWithoutDate.volume1day.toDouble,
+      tickerWithoutDate.volume7day.toDouble,
+      tickerWithoutDate.buyPrice.toLong,
+      tickerWithoutDate.sellPrice.toLong,
       date
     )
   }

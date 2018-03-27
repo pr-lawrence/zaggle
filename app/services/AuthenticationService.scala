@@ -74,6 +74,7 @@ class AuthenticationService @Inject()(ws: WSClient,
             .withHttpHeaders("Authorization" -> s"token ${token}")
             .get()
             .map { response =>
+              println(response.body)
               Some(Json.parse(response.body).as[GithubUser])
             }
         case _ =>

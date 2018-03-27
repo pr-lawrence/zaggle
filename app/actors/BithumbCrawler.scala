@@ -34,6 +34,11 @@ class BithumbCrawler @Inject() (bithumbApi: BithumbApi) extends Actor {
 
   private var cancellable: Cancellable = context.system.scheduler.schedule(0 seconds, 1 seconds)(self ! Tick)
 
+  override def preStart(): Unit = {
+    println("I'm alive!")
+    //    context.actorOf(BithumbCrawler.props)
+  }
+
   def receive = {
     case Tick =>
       bithumbApi.tickerAll.map(println)

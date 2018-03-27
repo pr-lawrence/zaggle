@@ -18,6 +18,6 @@ import scala.concurrent.duration._
 @Singleton
 class BithumbTask @Inject()(actorSystem: ActorSystem)(implicit executionContext: ExecutionContext) {
   actorSystem.scheduler.scheduleOnce(delay = 0 seconds) {
-    actorSystem.actorOf(Props(classOf[BithumbSupervisor]))
+//    actorSystem.actorOf(Props(classOf[BithumbSupervisor]))
   }
 }
