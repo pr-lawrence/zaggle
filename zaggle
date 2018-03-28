@@ -1,0 +1,18 @@
+#!/bin/bash
+
+if test -z "$1"
+then
+  echo "명령어줄 인자가 없습니다."
+fi
+
+case "$1" in
+    start)
+        source production;
+        sbt runProd;
+    ;;
+    stop)
+        kill `cat ./target/universal/stage/RUNNING_PID`
+    ;;
+esac
+
+exit 0
