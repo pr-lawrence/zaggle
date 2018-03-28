@@ -1,8 +1,10 @@
 #!/bin/bash
 
+PID_PATH=./target/universal/stage/RUNNING_PID
+
 if test -z "$1"
 then
-  echo "명령어줄 인자가 없습니다."
+  echo "Command not found. [start | stop]"
 fi
 
 case "$1" in
@@ -11,7 +13,12 @@ case "$1" in
         sbt runProd;
     ;;
     stop)
-        kill `cat ./target/universal/stage/RUNNING_PID`
+        if [ -f "$PID_PATH" ]
+        then
+            kill `cat $PID_PATH`
+        else
+            echo "$file not found."
+        fi
     ;;
 esac
 
