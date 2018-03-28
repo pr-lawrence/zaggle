@@ -23,7 +23,7 @@ class CompetitionOverviewRepository @Inject()(dbConfigProvider: DatabaseConfigPr
   import dbConfig._
   import profile.api._
 
-  private class CompetitionOverviewTable(tag: Tag) extends Table[CompetitionOverview](tag, "competition_overview") {
+  private class CompetitionOverviewTable(tag: Tag) extends Table[CompetitionOverview](tag, "tb_competition_overview") {
 
     implicit val localDateToDate = MappedColumnType.base[LocalDateTime, Date](
       ldt => Date.valueOf(ldt.toLocalDate()),

@@ -36,7 +36,6 @@ class AuthenticationController @Inject()(cc: ControllerComponents, authenticatio
     }
   }
 
-
   def loginUsingGithub = Action.async(parse.json) { request: Request[JsValue] =>
     request.body.asOpt[GithubLoginRequest] match {
       case Some(request) =>

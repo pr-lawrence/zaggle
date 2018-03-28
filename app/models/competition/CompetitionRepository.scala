@@ -29,7 +29,7 @@ class CompetitionRepository @Inject()(dbConfigProvider: DatabaseConfigProvider)(
   /**
     * Here we define the table. It will have a name of people
     */
-  private class CompetitionTable(tag: Tag) extends Table[Competition](tag, "competition") {
+  private class CompetitionTable(tag: Tag) extends Table[Competition](tag, "tb_competition") {
 
     implicit val localDateToDate = MappedColumnType.base[LocalDateTime, Date](
       ldt => Date.valueOf(ldt.toLocalDate()),

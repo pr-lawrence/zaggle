@@ -24,7 +24,7 @@ class UserRepository @Inject()(dbConfigProvider: DatabaseConfigProvider)(implici
   import dbConfig._
   import profile.api._
 
-  private class UserTable(tag: Tag) extends Table[User](tag, "user") {
+  private class UserTable(tag: Tag) extends Table[User](tag, "tb_user") {
 
     implicit val localDateToDate = MappedColumnType.base[LocalDateTime, Date](
       ldt => Date.valueOf(ldt.toLocalDate()),

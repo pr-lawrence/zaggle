@@ -16,6 +16,7 @@ libraryDependencies ++= Seq(
 
   "com.typesafe.play" %% "play-slick" % "3.0.1",
   "com.typesafe.play" %% "play-slick-evolutions" % "3.0.1",
+  "org.mariadb.jdbc" % "mariadb-java-client" % "2.2.3",
   "com.h2database" % "h2" % "1.4.196",
 
   "com.pauldijou" %% "jwt-play-json" % "0.14.1"
