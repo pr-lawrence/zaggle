@@ -12,10 +12,10 @@ import scala.concurrent._
 
 /**
   *
-  * @author: Lawrence
-  * @since: 2018. 2. 4.
-  * @note: Competition Controller
-  * @version: 0.1.0
+  * @author Lawrence
+  * @since 2018. 2. 4.
+  * @note Competition Controller
+  * @version 0.1.0
   */
 @Api(value = "Competition")
 @Singleton
@@ -29,7 +29,6 @@ class CompetitionController @Inject()(cc: ControllerComponents,
     response = classOf[Competition],
     responseContainer = "List")
   def list() = Action.async { implicit request =>
-    //    val competitions = competitionService.list()
     competitionRepository.list().map { competitions =>
       Ok(Json.toJson(competitions))
     }
