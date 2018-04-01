@@ -3,8 +3,8 @@ package actors
 import javax.inject.Inject
 
 import akka.actor.{Actor, Cancellable, Props}
+import models.bithumb.TickerRepository
 import play.api.Logger
-import play.api.libs.ws.WSClient
 import services.BithumbApi
 
 import scala.concurrent.duration._
@@ -23,11 +23,9 @@ object BithumbCrawler {
   sealed trait BithumbCrawlerCommand
 
   case object Tick extends BithumbCrawlerCommand
-  case object Start extends BithumbCrawlerCommand
-  case object Stop extends BithumbCrawlerCommand
 }
 
-class BithumbCrawler @Inject() (bithumbApi: BithumbApi) extends Actor {
+class BithumbCrawler @Inject() (bithumbApi: BithumbApi, tickerRepos: TickerRepository) extends Actor{
 
   import BithumbCrawler._
   import context.dispatcher
@@ -35,26 +33,13 @@ class BithumbCrawler @Inject() (bithumbApi: BithumbApi) extends Actor {
   private var cancellable: Cancellable = context.system.scheduler.schedule(0 seconds, 1 seconds)(self ! Tick)
 
   override def preStart(): Unit = {
-    println("I'm alive!")
-    //    context.actorOf(BithumbCrawler.props)
+//    log.info("Hello")
   }
 
   def receive = {
     case Tick =>
-      bithumbApi.tickerAll.map(println)
-    case Start =>
-      cancellable.isCancelled match {
-        case true =>
-          cancellable = context.system.scheduler.schedule(0 seconds, 1 seconds)(self ! Start)
-        case _ =>
-          Logger.info("bithumb-crawler is already running.")
-      }
-    case Stop =>
-      cancellable.isCancelled match {
-        case false  =>
-          cancellable.cancel()
-        case true=>
-          Logger.info("bithumb-crawler was already cancelled.")
+      for (tickerAll <- bithumbApi.tickerAll) {
+        tickerAll.data.foreach(t => tickerRepos.create(t._2))
       }
   }
 }

@@ -11,6 +11,7 @@ GET         /hello                           controllers.HelloController.l7check
 # Bithumb
 POST        /bithumb                         controllers.BithumbController.index
 GET         /bithumb/data                    controllers.BithumbController.get
+GET         /bithumb/ticker/:coinType/:size  controllers.BithumbController.list(coinType: String, size: Int)
 
 # Competition
 GET         /competition                     controllers.CompetitionController.list

@@ -2,6 +2,8 @@ package services
 
 import javax.inject._
 
+import models.bithumb.TickerRepository
+
 /**
   * @author Lawrence
   * @since 2018. 2. 12.
@@ -9,9 +11,13 @@ import javax.inject._
   * @version 0.1.0
   */
 @Singleton
-class BithumbService @Inject()() {
+class BithumbService @Inject()(tickerRepos: TickerRepository) {
 
   def get() = {
     "Hello world"
+  }
+
+  def list(coinType: String, size: Int) = {
+    tickerRepos.list(coinType, size)
   }
 }

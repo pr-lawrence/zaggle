@@ -5,6 +5,8 @@ import javax.inject._
 import play.api.mvc._
 import services.BithumbService
 
+import scala.concurrent.ExecutionContext
+
 /**
   *
   * @author Lawrence
@@ -14,7 +16,8 @@ import services.BithumbService
   */
 @Singleton
 class BithumbController @Inject()(cc: ControllerComponents,
-                                  bithumbService: BithumbService) extends AbstractController(cc) {
+                                  bithumbService: BithumbService)
+                                 (implicit ec: ExecutionContext) extends AbstractController(cc) {
 
   case class Student(age: Int, name: String)
 
@@ -34,5 +37,11 @@ class BithumbController @Inject()(cc: ControllerComponents,
   def get() = Action { implicit request =>
     println(bithumbService.get())
     Ok("")
+  }
+
+  def list(coinType: String, size: Int) = Action.async { implicit request =>
+    bithumbService.list(coinType, size).map { tickers =>
+      Ok(Json.toJson(tickers))
+    }
   }
 }
