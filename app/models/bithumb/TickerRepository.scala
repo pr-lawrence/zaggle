@@ -1,7 +1,7 @@
 package models.bithumb
 
-import java.sql.Date
-import java.time.{LocalDateTime, LocalTime}
+import java.sql.{Date, Timestamp}
+import java.time.{LocalDateTime, LocalTime, ZoneOffset}
 import javax.inject._
 
 import play.api.db.slick.DatabaseConfigProvider
@@ -24,12 +24,12 @@ class TickerRepository @Inject()(dbConfigProvider: DatabaseConfigProvider)(impli
   import dbConfig._
   import profile.api._
 
-  private class TickerTable(tag: Tag) extends Table[TickerData](tag, "tb_ticker") {
+  private implicit val localDateTimeColumnType = MappedColumnType.base[LocalDateTime, Timestamp](
+    ldt => Timestamp.from(ldt.toInstant(ZoneOffset.ofHours(9))),
+    d => d.toLocalDateTime
+  )
 
-    implicit val localDateToDate = MappedColumnType.base[LocalDateTime, Date](
-      ldt => Date.valueOf(ldt.toLocalDate()),
-      d => LocalDateTime.of(d.toLocalDate, LocalTime.MIDNIGHT)
-    )
+  private class TickerTable(tag: Tag) extends Table[TickerData](tag, "tb_ticker") {
 
     def id = column[Long]("id", O.PrimaryKey, O.AutoInc)
 
@@ -73,11 +73,7 @@ class TickerRepository @Inject()(dbConfigProvider: DatabaseConfigProvider)(impli
       .result
   }
 
-  def create (tParam: TickerData) = db.run {
-    implicit val localDateToDate = MappedColumnType.base[LocalDateTime, Date](
-      ldt => Date.valueOf(ldt.toLocalDate()),
-      d => LocalDateTime.of(d.toLocalDate, LocalTime.MIDNIGHT)
-    )
+  def create(tParam: TickerData) = db.run {
     (ticker.map(t => (t.coinType, t.openingPrice, t.closingPrice, t.minPrice, t.maxPrice, t.averagePrice, t.unitsTraded, t.volume1day, t.volume7day, t.buyPrice, t.sellPrice, t.regDate))
       returning ticker.map(_.id)
       into ((tData, id) => TickerData(id, tData._1, tData._2, tData._3, tData._4, tData._5, tData._6, tData._7, tData._8, tData._9, tData._10, tData._11, tData._12))

@@ -1,7 +1,7 @@
 package models.competition
 
-import java.sql.Date
-import java.time.{LocalDateTime, LocalTime}
+import java.sql.{Date, Timestamp}
+import java.time.{LocalDateTime, LocalTime, ZoneOffset}
 import javax.inject._
 
 import play.api.db.slick.DatabaseConfigProvider
@@ -23,12 +23,12 @@ class CompetitionOverviewRepository @Inject()(dbConfigProvider: DatabaseConfigPr
   import dbConfig._
   import profile.api._
 
-  private class CompetitionOverviewTable(tag: Tag) extends Table[CompetitionOverview](tag, "tb_competition_overview") {
+  private implicit val localDateTimeColumnType = MappedColumnType.base[LocalDateTime, Timestamp](
+    ldt => Timestamp.from(ldt.toInstant(ZoneOffset.ofHours(9))),
+    d => d.toLocalDateTime
+  )
 
-    implicit val localDateToDate = MappedColumnType.base[LocalDateTime, Date](
-      ldt => Date.valueOf(ldt.toLocalDate()),
-      d => LocalDateTime.of(d.toLocalDate, LocalTime.MIDNIGHT)
-    )
+  private class CompetitionOverviewTable(tag: Tag) extends Table[CompetitionOverview](tag, "tb_competition_overview") {
 
     def competitionOverviewId = column[Long]("competition_overview_id", O.PrimaryKey, O.AutoInc)
 
