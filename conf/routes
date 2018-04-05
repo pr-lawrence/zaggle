@@ -5,30 +5,36 @@
 
 # An example controller showing a sample home page
 
-GET         /                                controllers.ApplicationController.redirectDocs
-GET         /hello                           controllers.HelloController.l7check
+GET         /                                      controllers.ApplicationController.redirectDocs
+GET         /hello                                 controllers.HelloController.l7check
 
 # Bithumb
-POST        /bithumb                         controllers.BithumbController.index
-GET         /bithumb/data                    controllers.BithumbController.get
-GET         /bithumb/ticker/:coinType/:size  controllers.BithumbController.list(coinType: String, size: Int)
+POST        /bithumb                               controllers.BithumbController.index
+GET         /bithumb/data                          controllers.BithumbController.get
+GET         /bithumb/ticker/:coinType/:size        controllers.BithumbController.list(coinType: String, size: Int)
 
 # Competition
-GET         /competition                     controllers.CompetitionController.list
-GET         /competition/:id                 controllers.CompetitionController.get(id: Long)
-GET         /competition/:id/overview        controllers.CompetitionController.getOverview(id: Long)
+GET         /competition                           controllers.CompetitionController.list
+GET         /competition/:id                       controllers.CompetitionController.get(id: Long)
+GET         /competition/:id/overview              controllers.CompetitionController.getOverview(id: Long)
 
 # Authentication
-POST        /auth/local                      controllers.AuthenticationController.local
-POST        /auth/github                     controllers.AuthenticationController.loginUsingGithub
+POST        /auth/local                            controllers.AuthenticationController.local
+POST        /auth/github                           controllers.AuthenticationController.loginUsingGithub
 
 # Account
-GET         /api/account/me                  controllers.AccountController.me
+GET         /api/account/me                        controllers.AccountController.me
 
+
+# Discussion
+GET         /discussion                            controllers.DiscussionController.list
+POST        /discussion                            controllers.DiscussionController.create
+GET         /discussion/:id                        controllers.DiscussionController.get(id: Long)
+PUT         /discussion                            controllers.DiscussionController.modify
 
 # Map static resources from the /public folder to the /assets URL path
-GET         /assets/*file                    controllers.Assets.versioned(path="/public", file: Asset)
+GET         /assets/*file                          controllers.Assets.versioned(path="/public", file: Asset)
 
 # Swagger API
-GET         /swagger.json                    controllers.ApiHelpController.getResources
-GET         /docs/*file                      controllers.Assets.at(path="/public/swagger-ui",file)
+GET         /swagger.json                          controllers.ApiHelpController.getResources
+GET         /docs/*file                            controllers.Assets.at(path="/public/swagger-ui",file)

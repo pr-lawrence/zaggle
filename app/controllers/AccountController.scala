@@ -20,8 +20,6 @@ class AccountController @Inject()(cc: ControllerComponents,
                                  ) extends AbstractController(cc) {
 
   def me() = authorizedAction { request =>
-    //    Logger.info(s"${request.attrs.get(AuthorizedAction.JWT_KEY)}")
-
     val reqContextOpt = request.attrs.get(AuthorizedAction.JWT_KEY)
 
     reqContextOpt match {
