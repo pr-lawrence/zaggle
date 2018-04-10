@@ -22,7 +22,7 @@ object JwtUtils{
 
   private val KEY = config.getString("play.http.secret.key")
   private val ALGORITHM = JwtAlgorithm.HS256
-  private val BASIC_EXPIRY_TIME = 10 minutes
+  private val BASIC_EXPIRY_TIME = 60 minutes
 
   def tokenOf(datas: Map[String, String]): String= {
     encode(Json.toJsObject(datas), JWT_DEFAULT_OPTION)
