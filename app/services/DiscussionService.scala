@@ -23,4 +23,8 @@ class DiscussionService @Inject()(discussionRepos: DiscussionRepository) {
   def getById(id: Long): Future[Option[Discussion]] = {
     discussionRepos.selectById(id)
   }
+
+  def create(discussion: Discussion): Future[Discussion] = {
+    discussionRepos.insert(discussion)
+  }
 }
