@@ -40,18 +40,11 @@ class DiscussionController @Inject()(cc: ControllerComponents, discussionService
   }
 
   def create() = Action.async(parse.json) { request: Request[JsValue] =>
-    //    Future {
-    //      NotFound
-    //    }
     request.body.asOpt[Discussion] match {
       case Some(discussion) =>
         discussionService.create(discussion).map { discussion =>
           Ok(Json.toJson(discussion))
         }
-//        authenticationService.localLogin(loginRequest).map(authOpt =>
-//          if (authOpt.isDefined) Ok(Json.toJson(authOpt.get))
-//          else BadRequest("")
-//        )
       case _ =>
         Future(BadRequest(""))
     }
@@ -62,5 +55,4 @@ class DiscussionController @Inject()(cc: ControllerComponents, discussionService
       NotFound
     }
   }
-
 }
