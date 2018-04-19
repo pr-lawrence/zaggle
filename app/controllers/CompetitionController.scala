@@ -39,7 +39,7 @@ class CompetitionController @Inject()(cc: ControllerComponents,
     response = classOf[Competition])
   def get(id: Long) = Action.async { implicit request =>
     competitionRepository.get(id).map { competitions =>
-      if(competitions.isEmpty) {
+      if (competitions.isEmpty) {
         NotFound
       } else {
         Ok(Json.toJson(competitions.head))

@@ -5,7 +5,7 @@ import javax.inject._
 import play.api.db.slick.DatabaseConfigProvider
 import slick.jdbc.JdbcProfile
 
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent._
 
 /**
   *

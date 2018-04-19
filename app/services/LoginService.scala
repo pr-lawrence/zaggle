@@ -5,7 +5,7 @@ import javax.inject.{Inject, Singleton}
 import common.CryptoUtils
 import models.authentication.{LoginRequest, User, UserRepository}
 
-import scala.concurrent.{Future, Promise}
+import scala.concurrent._
 
 /**
   *

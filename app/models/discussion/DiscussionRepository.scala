@@ -83,11 +83,11 @@ class DiscussionRepository @Inject()(dbConfigProvider: DatabaseConfigProvider)(i
     discussion.filter(_.discusId === id).result.headOption
   }
 
-  def insert(dParam: Discussion) = db.run {
-    (discussion.map(d => (d.competId, d.title, d.content, d.author, d.subject, d.regiDate, d.editDate))
+  def insert(param: Discussion) = db.run {
+    (discussion.map(e => (e.competId, e.title, e.content, e.author, e.subject, e.regiDate, e.editDate))
       returning discussion.map(_.discusId)
-      into ((dData, id) => Discussion(id, dData._1, dData._2, dData._3, dData._4, dData._5, dData._6, dData._7))
-      ) += (dParam.competId, dParam.title, dParam.content, dParam.author, dParam.subject, dParam.regiDate, dParam.editDate)
+      into ((column, id) => Discussion(id, column._1, column._2, column._3, column._4, column._5, column._6, column._7))
+      ) += (param.competId, param.title, param.content, param.author, param.subject, param.regiDate, param.editDate)
   }
 
   def update(dParam: Discussion): Future[Seq[Discussion]] = db.run {

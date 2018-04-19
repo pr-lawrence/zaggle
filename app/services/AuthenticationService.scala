@@ -6,7 +6,6 @@ import com.typesafe.config.ConfigFactory
 import common.JwtUtils
 import models.authentication._
 import models.common.ZaggleRequestContext
-import play.api.Logger
 import play.api.libs.json._
 import play.api.libs.ws._
 

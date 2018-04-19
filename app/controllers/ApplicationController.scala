@@ -10,6 +10,7 @@ import play.api.mvc._
   * @author Lawrence
   * @since 2018. 2. 6.
   * @note
+  * @version 0.0.1
   */
 @Singleton
 class ApplicationController @Inject()(cc: ControllerComponents, competitionService: CompetitionRepository) extends AbstractController(cc) {

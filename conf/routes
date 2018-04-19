@@ -30,7 +30,12 @@ GET         /api/account/me                        controllers.AccountController
 GET         /discussion                            controllers.DiscussionController.list
 POST        /discussion                            controllers.DiscussionController.create
 GET         /discussion/:id                        controllers.DiscussionController.get(id: Long)
-PUT         /discussion                            controllers.DiscussionController.modify
+#PUT         /discussion                            controllers.DiscussionController.modify
+
+
+# Comment
+
+GET /comment    controllers.CommentController.list(type: String, id: Long)
 
 # Map static resources from the /public folder to the /assets URL path
 GET         /assets/*file                          controllers.Assets.versioned(path="/public", file: Asset)
