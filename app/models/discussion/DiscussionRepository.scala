@@ -44,6 +44,8 @@ class DiscussionRepository @Inject()(dbConfigProvider: DatabaseConfigProvider)(i
 
     def discusId = column[Long]("discus_id", O.PrimaryKey, O.AutoInc)
 
+    def competId = column[Long]("compet_id")
+
     def title = column[String]("title")
 
     def content = column[String]("content")
@@ -65,7 +67,7 @@ class DiscussionRepository @Inject()(dbConfigProvider: DatabaseConfigProvider)(i
       * apply and unapply methods.
       */
 
-    def * = (discusId, title, content, author, subject, regiDate, editDate) <> ((Discussion.apply _).tupled, Discussion.unapply)
+    def * = (discusId, competId, title, content, author, subject, regiDate, editDate) <> ((Discussion.apply _).tupled, Discussion.unapply)
   }
 
   /**
@@ -82,10 +84,10 @@ class DiscussionRepository @Inject()(dbConfigProvider: DatabaseConfigProvider)(i
   }
 
   def insert(dParam: Discussion) = db.run {
-    (discussion.map(d => (d.title, d.content, d.author, d.subject, d.regiDate, d.editDate))
+    (discussion.map(d => (d.competId, d.title, d.content, d.author, d.subject, d.regiDate, d.editDate))
       returning discussion.map(_.discusId)
-      into ((dData, id) => Discussion(id, dData._1, dData._2, dData._3, dData._4, dData._5, dData._6))
-      ) += (dParam.title, dParam.content, dParam.author, dParam.subject, dParam.regiDate, dParam.editDate)
+      into ((dData, id) => Discussion(id, dData._1, dData._2, dData._3, dData._4, dData._5, dData._6, dData._7))
+      ) += (dParam.competId, dParam.title, dParam.content, dParam.author, dParam.subject, dParam.regiDate, dParam.editDate)
   }
 
   def update(dParam: Discussion): Future[Seq[Discussion]] = db.run {

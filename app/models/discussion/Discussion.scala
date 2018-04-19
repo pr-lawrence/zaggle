@@ -12,6 +12,7 @@ import play.api.libs.json.Json
   * @version
   */
 case class Discussion(discusId: Long
+                      ,competId: Long
                       , title: String
                       , content: String
                       , author: String
