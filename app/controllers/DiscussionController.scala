@@ -2,6 +2,7 @@ package controllers
 
 import javax.inject._
 
+import common.AuthorizedAction
 import io.swagger.annotations.{Api, ApiOperation}
 import models.competition.Competition
 import models.discussion.Discussion
@@ -22,7 +23,9 @@ import scala.concurrent.ExecutionContext.Implicits.global
   */
 @Api(value = "Discussion")
 @Singleton
-class DiscussionController @Inject()(cc: ControllerComponents, discussionService: DiscussionService) extends AbstractController(cc) {
+class DiscussionController @Inject()(cc: ControllerComponents
+                                     , authorizedAction: AuthorizedAction
+                                     , discussionService: DiscussionService) extends AbstractController(cc) {
 
   @ApiOperation(value = "List of Discussion",
     notes = "Discussion 리스트 정보를 반환한다.",
@@ -51,7 +54,8 @@ class DiscussionController @Inject()(cc: ControllerComponents, discussionService
   @ApiOperation(value = "Create Discussion",
     notes = "Discussion을 생성한다",
     response = classOf[Discussion])
-  def create() = Action.async(parse.json) { request: Request[JsValue] =>
+  def create() = authorizedAction.async(parse.json) { request: Request[JsValue] =>
+    println(request.body)
     request.body.asOpt[Discussion] match {
       case Some(discussion) =>
         discussionService.create(discussion).map { discussion =>

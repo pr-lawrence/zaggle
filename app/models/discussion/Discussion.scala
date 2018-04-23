@@ -12,12 +12,12 @@ import play.api.libs.json.Json
   * @version
   */
 case class Discussion(discusId: Long
-                      ,competId: Long
+                      , competId: Long
                       , title: String
                       , content: String
                       , author: String
                       , subject: String
-                      , regiDate: LocalDateTime = LocalDateTime.now
+                      , regiDate: Option[LocalDateTime] = Some(LocalDateTime.now)
                       , editDate: Option[LocalDateTime])
 
 object Discussion {
