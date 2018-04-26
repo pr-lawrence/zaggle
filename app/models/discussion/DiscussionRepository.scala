@@ -79,6 +79,10 @@ class DiscussionRepository @Inject()(dbConfigProvider: DatabaseConfigProvider)(i
     discussion.result
   }
 
+  def selectByCompetitionId(competitionId: Long): Future[Seq[Discussion]] = db.run {
+    discussion.filter(_.competId === competitionId).result
+  }
+
   def selectById(id: Long): Future[Option[Discussion]] = db.run {
     discussion.filter(_.discusId === id).result.headOption
   }

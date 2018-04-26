@@ -2,6 +2,7 @@ package controllers
 
 import javax.inject._
 
+import com.typesafe.config.ConfigFactory
 import common.AuthorizedAction
 import io.swagger.annotations.{Api, ApiOperation}
 import models.competition.Competition
@@ -31,8 +32,14 @@ class DiscussionController @Inject()(cc: ControllerComponents
     notes = "Discussion 리스트 정보를 반환한다.",
     response = classOf[Discussion],
     responseContainer = "List")
-  def list = Action.async { implicit request =>
-    discussionService.list().map { discussions =>
+  def list(competitionId: Option[Long]) = Action.async { implicit request =>
+    val discussions = competitionId match {
+      case Some(competitionId) =>
+        discussionService.list(competitionId)
+      case None =>
+        discussionService.list
+    }
+    discussions.map { discussions =>
       Ok(Json.toJson(discussions))
     }
   }

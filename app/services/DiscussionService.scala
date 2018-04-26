@@ -16,8 +16,12 @@ import scala.concurrent._
 @Singleton
 class DiscussionService @Inject()(discussionRepos: DiscussionRepository) {
 
-  def list(): Future[Seq[Discussion]] = {
+  def list: Future[Seq[Discussion]] = {
     discussionRepos.select()
+  }
+
+  def list(competitionId: Long): Future[Seq[Discussion]] = {
+    discussionRepos.selectByCompetitionId(competitionId)
   }
 
   def getById(id: Long): Future[Option[Discussion]] = {
