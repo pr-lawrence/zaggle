@@ -62,7 +62,6 @@ class DiscussionController @Inject()(cc: ControllerComponents
     notes = "Discussion을 생성한다",
     response = classOf[Discussion])
   def create() = authorizedAction.async(parse.json) { request: Request[JsValue] =>
-    println(request.body)
     request.body.asOpt[Discussion] match {
       case Some(discussion) =>
         discussionService.create(discussion).map { discussion =>
@@ -77,11 +76,14 @@ class DiscussionController @Inject()(cc: ControllerComponents
     notes = "Competition 리스트 정보를 반환한다.",
     response = classOf[Competition],
     responseContainer = "List")
-  def modity() = TODO
+  def modity(id: Long) = Action.async(parse.json) { request: Request[JsValue] =>
+    request.body.asOpt[Discussion] match {
+      case Some(discussion) =>
+        discussionService.update(discussion)
+        Future(Ok(""))
+      case _ =>
+        Future(BadRequest(""))
+    }
+  }
 
-  //  def modify() = Action.async { implicit request =>
-  //    Future {
-  //      NotFound
-  //    }
-  //  }
 }

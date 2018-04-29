@@ -31,4 +31,8 @@ class DiscussionService @Inject()(discussionRepos: DiscussionRepository) {
   def create(discussion: Discussion): Future[Discussion] = {
     discussionRepos.insert(discussion)
   }
+
+  def update(discussion:Discussion) {
+    discussionRepos.update(discussion)
+  }
 }

@@ -30,8 +30,7 @@ GET         /api/account/me                        controllers.AccountController
 GET         /discussion                            controllers.DiscussionController.list(competitionId: Option[Long])
 POST        /discussion                            controllers.DiscussionController.create
 GET         /discussion/:id                        controllers.DiscussionController.get(id: Long)
-#PUT         /discussion                            controllers.DiscussionController.modify
-
+PUT         /discussion/:id                        controllers.DiscussionController.modity(id: Long)
 
 # Comment
 

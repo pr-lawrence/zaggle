@@ -39,7 +39,7 @@ class AuthenticationService @Inject()(ws: WSClient,
     loginService.login(loginRequest).map(userOpt =>
       userOpt match {
         case Some(user) =>
-          val jsObject = Json.toJson(ZaggleRequestContext(user.userId, user.loginId)).as[JsObject]
+          val jsObject = Json.toJson(ZaggleRequestContext(user.userId, user.loginId, "")).as[JsObject]
           val accessToken = JwtUtils.tokenOf(jsObject)
           val refreshToken = ""
 
@@ -73,7 +73,6 @@ class AuthenticationService @Inject()(ws: WSClient,
             .withHttpHeaders("Authorization" -> s"token ${token}")
             .get()
             .map { response =>
-              println(response.body)
               Some(Json.parse(response.body).as[GithubUser])
             }
         case _ =>
@@ -87,7 +86,7 @@ class AuthenticationService @Inject()(ws: WSClient,
     } yield {
       userOpt match {
         case Some(user) =>
-          val jsObject = Json.toJson(ZaggleRequestContext(user.id, user.login)).as[JsObject]
+          val jsObject = Json.toJson(ZaggleRequestContext(user.id, user.login, user.avatarUrl)).as[JsObject]
           val accessToken = JwtUtils.tokenOf(jsObject)
           val refreshToken = ""
 
