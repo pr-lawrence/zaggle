@@ -11,7 +11,7 @@ import play.api.libs.ws._
 
 import scala.concurrent._
 import scala.concurrent.ExecutionContext.Implicits.global
-
+import java.util.UUID.randomUUID
 
 /**
   *
@@ -28,10 +28,11 @@ class AuthenticationService @Inject()(ws: WSClient,
   val config = ConfigFactory.load()
 
   val GITHUB_CLIENT_ID = config.getString("social.github.client-id")
-  val GITHUB_CLIENT_SECRET =  config.getString("social.github.client-secret")
+  val GITHUB_CLIENT_SECRET = config.getString("social.github.client-secret")
 
   /**
     * local Login
+    *
     * @param loginRequest
     * @return
     */
@@ -52,6 +53,7 @@ class AuthenticationService @Inject()(ws: WSClient,
 
   /**
     * Login using Github
+    *
     * @param githubLoginRequest
     * @return
     */
@@ -60,8 +62,8 @@ class AuthenticationService @Inject()(ws: WSClient,
       ws.url("https://github.com/login/oauth/access_token")
         .post(Json.toJson(GithubOauthRequest(GITHUB_CLIENT_ID, GITHUB_CLIENT_SECRET, githubLoginRequest.code)))
         .map { response =>
-          if( response.status != 200 ) None
-          else if ( response.body.contains("error") ) None
+          if (response.status != 200) None
+          else if (response.body.contains("error")) None
           else Some(response.body.split("&").map(_.split("=")).filter(_ (0) == "access_token").head(1))
         }
     }
@@ -80,20 +82,57 @@ class AuthenticationService @Inject()(ws: WSClient,
       }
     }
 
-    for {
+    val result = for {
       accessTokenOpt <- getAccessToken()
       userOpt <- getUser(accessTokenOpt)
     } yield {
       userOpt match {
-        case Some(user) =>
-          val jsObject = Json.toJson(ZaggleRequestContext(user.id, user.login, user.avatarUrl)).as[JsObject]
-          val accessToken = JwtUtils.tokenOf(jsObject)
-          val refreshToken = ""
-
-          Some(AuthToken(accessToken, refreshToken))
+        case Some(githubUser) =>
+          val loginId = githubUser.login
+          val userFuture: Future[User] = userRepository.selectByProvider(loginId, "github").flatMap { userOpt =>
+            userOpt match {
+              case Some(user) =>
+                Future(user)
+              case _ =>
+                val user = User(None, loginId, "", None, Some("github"), None, None)
+                userRepository.insert(user)
+            }
+          }
+          userFuture.map { user =>
+            val accessToken = createAccessToken(ZaggleRequestContext(user.userId, githubUser.login, githubUser.avatarUrl))
+            val uuid = randomUUID.toString
+            userRepository.updateRefreshToken(githubUser.id, uuid)
+            val refreshToken = JwtUtils.tokenOf(Map("refreshToken" -> uuid))
+            Some(AuthToken(accessToken, refreshToken))
+          }
         case _ =>
-          None
+          Future(None)
       }
     }
+    result.flatMap(x => x)
   }
+
+  /**
+    * refresh Token
+    *
+    * @param zaggleRequestContext
+    * @return
+    */
+  def refreshToken(zaggleRequestContext: ZaggleRequestContext): AuthToken = {
+    val accessToken = createAccessToken(zaggleRequestContext)
+    val refreshToken = createRefreshTokenNSave(zaggleRequestContext.userId.get)
+    AuthToken(accessToken, refreshToken)
+  }
+
+  private def createAccessToken(zaggleRequestContext: ZaggleRequestContext): String = {
+    val jsObject = Json.toJson(zaggleRequestContext).as[JsObject]
+    JwtUtils.tokenOf(jsObject)
+  }
+
+  private def createRefreshTokenNSave(userId: Long): String = {
+    val uuid = randomUUID.toString
+    userRepository.updateRefreshToken(userId, uuid)
+    JwtUtils.tokenOf(Map("refreshToken" -> uuid))
+  }
+
 }

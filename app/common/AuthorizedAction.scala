@@ -27,33 +27,31 @@ case class Authorized[A](action: Action[A]) extends Action[A] {
   override def executionContext: ExecutionContext = action.executionContext
 
   def apply(request: Request[A]): Future[Result] = {
-    val accessToken = request.headers.get("authorization")
-    if (accessToken.isDefined) {
-      val Array(tokenType, token) = accessToken.get.split("\\s")
+    request.headers.get("authorization") match {
+      case Some(accessToken) =>
+        val Array(tokenType, token) = accessToken.split("\\s")
 
-      // token 존재 여부
-      JwtUtils.decode(token) match {
-        case Success(jwtClaim) =>
-          val exp = jwtClaim.expiration
-
-          // 만료시간 확인
-          if(exp.isDefined){
-            val expLocalDateTime = LocalDateTime.ofInstant(new Date(exp.get).toInstant, ZoneId.systemDefault)
-
-            // 만료시간 경과 여부 확인
-            if(LocalDateTime.now isBefore expLocalDateTime) {
-              action(request.addAttr(AuthorizedAction.JWT_KEY, Json.parse(jwtClaim.content).as[ZaggleRequestContext]))
-            } else {
-              Future.successful(BadRequest("토큰의 유효시간이 만료 되었습니다."))
+        // token 존재 여부
+        JwtUtils.decode(token) match {
+          case Success(jwtClaim) =>
+            jwtClaim.expiration match {
+              case Some(exp) =>
+                val expLocalDateTime = LocalDateTime.ofInstant(new Date(exp).toInstant, ZoneId.systemDefault)
+                // 만료시간 경과 여부 확인
+                if (LocalDateTime.now isBefore expLocalDateTime) {
+                  action(request.addAttr(AuthorizedAction.JWT_KEY, Json.parse(jwtClaim.content).as[ZaggleRequestContext]))
+                } else {
+                  Future.successful(BadRequest("Token is already expired"))
+                }
+              case _ =>
+                Future.successful(BadRequest("Token is invalid"))
             }
-          } else {
-            Future.successful(BadRequest("토큰의 유효시간이 존재하지 않습니다."))
-          }
-        case _ =>
-          Future.successful(Unauthorized("허용되지 않는 요청입니다."))
-      }
-    } else {
-      Future.successful(Unauthorized("허용되지 않는 요청입니다."))
+          // 토큰이 존재하지 않음
+          case _ =>
+            Future.successful(Unauthorized("허용되지 않는 요청입니다."))
+        }
+      case _ =>
+        Future.successful(Unauthorized("허용되지 않는 요청입니다."))
     }
   }
 }
@@ -69,3 +67,4 @@ class AuthorizedAction @Inject()(parser: BodyParsers.Default)(implicit ec: Execu
 
   override def composeAction[A](action: Action[A]) = new Authorized(action)
 }
+

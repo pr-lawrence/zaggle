@@ -9,7 +9,7 @@ import play.api.libs.json.Json
   * @note
   * @version
   */
-case class ZaggleRequestContext(userId: Long, loginId: String, avatarUrl: String)
+case class ZaggleRequestContext(userId: Option[Long], loginId: String, avatarUrl: String)
 
 object ZaggleRequestContext{
   implicit val format = Json.format[ZaggleRequestContext]

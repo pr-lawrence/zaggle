@@ -2,7 +2,6 @@ package controllers
 
 import javax.inject._
 
-import com.typesafe.config.ConfigFactory
 import common.AuthorizedAction
 import io.swagger.annotations.{Api, ApiOperation}
 import models.competition.Competition
@@ -77,7 +76,7 @@ class DiscussionController @Inject()(cc: ControllerComponents
     response = classOf[Competition],
     responseContainer = "List")
   def modity(id: Long) = Action.async(parse.json) { request: Request[JsValue] =>
-    request.body.asOpt[Discussion] match {
+   request.body.asOpt[Discussion] match {
       case Some(discussion) =>
         discussionService.update(discussion)
         Future(Ok(""))

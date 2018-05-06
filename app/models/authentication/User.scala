@@ -11,8 +11,14 @@ import play.api.libs.json.Json
   * @note
   * @version
   */
-case class User (userId: Long, loginId: String, password: String, regiDate: LocalDateTime, editDate: Option[LocalDateTime])
+case class User(userId: Option[Long]
+                , loginId: String
+                , password: String
+                , refreshToken: Option[String]
+                , provider: Option[String]
+                , regiDate: Option[LocalDateTime] = Some(LocalDateTime.now)
+                , editDate: Option[LocalDateTime])
 
-object User{
+object User {
   implicit val format = Json.format[User]
 }

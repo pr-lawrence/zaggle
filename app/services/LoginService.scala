@@ -19,6 +19,6 @@ class LoginService @Inject()(userRepository: UserRepository){
 
   def login(loginRequest: LoginRequest): Future[Option[User]] = {
     val hashedPassword: String = CryptoUtils.sha256Hash(loginRequest.password)
-    userRepository.getByLogin(loginRequest.id, hashedPassword)
+    userRepository.selectByLogin(loginRequest.id, hashedPassword)
   }
 }

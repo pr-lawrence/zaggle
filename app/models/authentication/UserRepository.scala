@@ -24,20 +24,24 @@ class UserRepository @Inject()(dbConfigProvider: DatabaseConfigProvider)(implici
   import dbConfig._
   import profile.api._
 
+  private implicit val localDateToDate = MappedColumnType.base[LocalDateTime, Date](
+    ldt => Date.valueOf(ldt.toLocalDate()),
+    d => LocalDateTime.of(d.toLocalDate, LocalTime.MIDNIGHT)
+  )
+
   private class UserTable(tag: Tag) extends Table[User](tag, "tb_user") {
 
-    implicit val localDateToDate = MappedColumnType.base[LocalDateTime, Date](
-      ldt => Date.valueOf(ldt.toLocalDate()),
-      d => LocalDateTime.of(d.toLocalDate, LocalTime.MIDNIGHT)
-    )
-
-    def userId = column[Long]("user_id", O.PrimaryKey, O.AutoInc)
+    def userId = column[Option[Long]]("user_id", O.PrimaryKey, O.AutoInc)
 
     def loginId = column[String]("login_id")
 
     def password = column[String]("password")
 
-    def regiDate = column[LocalDateTime]("regi_date")
+    def refreshToken = column[Option[String]]("refresh_token")
+
+    def provider = column[Option[String]]("provider")
+
+    def regiDate = column[Option[LocalDateTime]]("regi_date")
 
     def editDate = column[Option[LocalDateTime]]("edit_date")
 
@@ -50,17 +54,55 @@ class UserRepository @Inject()(dbConfigProvider: DatabaseConfigProvider)(implici
       * apply and unapply methods.
       */
 
-    def * = (userId, loginId, password, regiDate, editDate) <> ((User.apply _).tupled, User.unapply)
+    def * = (userId, loginId, password, refreshToken, provider, regiDate, editDate) <> ((User.apply _).tupled, User.unapply)
   }
 
   private val user = TableQuery[UserTable]
 
-  def get(id: Long): Future[Seq[User]] = db.run {
-    user.filter(_.userId === id).result
+  def select(id: Option[Long]): Future[Option[User]] = db.run {
+    user.filter(_.userId === id)
+      .result
+      .headOption
   }
 
-  def getByLogin(loginId: String, password: String): Future[Option[User]] = db.run {
-    user.filter(x => x.loginId === loginId && x.password === password).result.headOption
+  def selectByLogin(loginId: String, password: String): Future[Option[User]] = db.run {
+    user.filter(_.loginId === loginId)
+      .filter(_.password === password)
+      .result
+      .headOption
   }
 
+  def selectByProvider(loginId: String, provider: String): Future[Option[User]] = db.run {
+    user.filter(_.loginId === loginId)
+      .filter(_.provider === provider)
+      .result
+      .headOption
+  }
+
+  def insert(param: User): Future[User] = db.run {
+    (user.map(e => (e.loginId, e.password, e.refreshToken, e.provider, e.regiDate, e.editDate))
+      returning user.map(_.userId)
+      into ((column, id) => User(id, column._1, column._2, column._3, column._4, column._5, column._6))
+      ) += (param.loginId, param.password, param.refreshToken, param.provider, Some(LocalDateTime.now), param.editDate)
+  }
+
+  def update(param: User): Future[Int] = db.run {
+    user.filter(_.userId === param.userId)
+      .map(e => (e.refreshToken))
+      .update((param.refreshToken))
+  }
+
+  def updateRefreshToken(userId: Long, refreshToken: String): Future[Int] = db.run {
+    user.filter(_.userId === userId)
+      .map(e => (e.refreshToken))
+      .update((Option(refreshToken)))
+  }
+
+  /*
+    def update(param: Discussion): Future[Int] = db.run {
+      discussion.filter(_.discusId === param.discusId)
+        .map(e => (e.competId, e.title, e.content, e.author, e.subject, e.editDate))
+        .update((param.competId, param.title, param.content, param.author, param.subject, Some(LocalDateTime.now)))
+    }
+  */
 }
