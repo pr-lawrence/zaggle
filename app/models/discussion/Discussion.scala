@@ -17,8 +17,10 @@ case class Discussion(discusId: Long
                       , content: String
                       , author: String
                       , subject: String
+                      , delFlag: Option[Boolean] = Some(false)
                       , regiDate: Option[LocalDateTime] = Some(LocalDateTime.now)
-                      , editDate: Option[LocalDateTime])
+                      , editDate: Option[LocalDateTime]
+                      , delDate: Option[LocalDateTime])
 
 object Discussion {
   implicit val format = Json.format[Discussion]

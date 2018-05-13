@@ -57,4 +57,8 @@ class CompetitionController @Inject()(cc: ControllerComponents,
     }
   }
 
+  def delete(id: Long) = Action.async { implicit request =>
+    Future(Ok(""))
+  }
+
 }

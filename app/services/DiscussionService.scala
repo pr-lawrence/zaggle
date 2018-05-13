@@ -32,7 +32,11 @@ class DiscussionService @Inject()(discussionRepos: DiscussionRepository) {
     discussionRepos.insert(discussion)
   }
 
-  def update(discussion:Discussion) {
+  def update(discussion:Discussion): Future[Int] = {
     discussionRepos.update(discussion)
+  }
+
+  def delete(id: Long): Future[Int] = {
+    discussionRepos.delete(id)
   }
 }

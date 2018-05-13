@@ -61,6 +61,8 @@ class DiscussionController @Inject()(cc: ControllerComponents
     notes = "Discussion을 생성한다",
     response = classOf[Discussion])
   def create() = authorizedAction.async(parse.json) { request: Request[JsValue] =>
+    val reqContextOpt = request.attrs.get(AuthorizedAction.JWT_KEY)
+    println(reqContextOpt)
     request.body.asOpt[Discussion] match {
       case Some(discussion) =>
         discussionService.create(discussion).map { discussion =>
@@ -83,6 +85,11 @@ class DiscussionController @Inject()(cc: ControllerComponents
       case _ =>
         Future(BadRequest(""))
     }
+  }
+
+  def delete(id: Long) = Action.async { implicit request =>
+    discussionService.delete(id)
+    Future(Ok(""))
   }
 
 }
