@@ -11,7 +11,7 @@ import play.api.libs.json.Json
   * @note
   * @version
   */
-case class Discussion(discusId: Long
+case class Discussion(discusId: Option[Long]
                       , competId: Long
                       , title: String
                       , content: String

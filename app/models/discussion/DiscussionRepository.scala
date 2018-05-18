@@ -42,7 +42,7 @@ class DiscussionRepository @Inject()(dbConfigProvider: DatabaseConfigProvider)(i
     /** The age column */
     //    def age = column[Int]("age")
 
-    def discusId = column[Long]("discus_id", O.PrimaryKey, O.AutoInc)
+    def discusId = column[Option[Long]]("discus_id", O.PrimaryKey, O.AutoInc)
 
     def competId = column[Long]("compet_id")
 

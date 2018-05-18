@@ -31,7 +31,7 @@ GET           /discussion                            controllers.DiscussionContr
 POST          /discussion                            controllers.DiscussionController.create
 GET           /discussion/:id                        controllers.DiscussionController.get(id: Long)
 PUT           /discussion/:id                        controllers.DiscussionController.modity(id: Long)
-DELETE        /discussion/:id                       controllers.DiscussionController.delete(id: Long)
+DELETE        /discussion/:id                        controllers.DiscussionController.delete(id: Long)
 
 # Comment
 

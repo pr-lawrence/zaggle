@@ -62,10 +62,9 @@ class DiscussionController @Inject()(cc: ControllerComponents
     response = classOf[Discussion])
   def create() = authorizedAction.async(parse.json) { request: Request[JsValue] =>
     val reqContextOpt = request.attrs.get(AuthorizedAction.JWT_KEY)
-    println(reqContextOpt)
     request.body.asOpt[Discussion] match {
       case Some(discussion) =>
-        discussionService.create(discussion).map { discussion =>
+        discussionService.create(discussion.copy(userId = reqContextOpt.get.userId)).map { discussion =>
           Ok(Json.toJson(discussion))
         }
       case _ =>
