@@ -11,7 +11,7 @@ import scala.concurrent.{ExecutionContext, Future}
 
 /**
   *
-  * @author Lawrence
+  * @userId Lawrence
   * @since 2018. 4. 5.
   * @note
   * @version
@@ -50,9 +50,9 @@ class DiscussionRepository @Inject()(dbConfigProvider: DatabaseConfigProvider)(i
 
     def content = column[String]("content")
 
-    def author = column[String]("author")
+    def userId = column[Option[Long]]("user_id")
 
-    def subject = column[String]("subject")
+//    def subject = column[String]("subject")
 
     def delFlag = column[Option[Boolean]]("del_flag")
 
@@ -71,7 +71,7 @@ class DiscussionRepository @Inject()(dbConfigProvider: DatabaseConfigProvider)(i
       * apply and unapply methods.
       */
 
-    def * = (discusId, competId, title, content, author, subject, delFlag, regiDate, editDate, delDate) <> ((Discussion.apply _).tupled, Discussion.unapply)
+    def * = (discusId, competId, title, content, userId, delFlag, regiDate, editDate, delDate) <> ((Discussion.apply _).tupled, Discussion.unapply)
   }
 
   /**
@@ -94,16 +94,16 @@ class DiscussionRepository @Inject()(dbConfigProvider: DatabaseConfigProvider)(i
   }
 
   def insert(param: Discussion): Future[Discussion] = db.run {
-    (discussion.map(e => (e.competId, e.title, e.content, e.author, e.subject, e.delFlag, e.regiDate, e.editDate, e.delDate))
+    (discussion.map(e => (e.competId, e.title, e.content, e.userId, e.delFlag, e.regiDate, e.editDate, e.delDate))
       returning discussion.map(_.discusId)
-      into ((column, id) => Discussion(id, column._1, column._2, column._3, column._4, column._5, column._6, column._7, column._8, column._9))
-      ) += (param.competId, param.title, param.content, param.author, param.subject, Some(false), Some(LocalDateTime.now), param.editDate, param.delDate)
+      into ((column, id) => Discussion(id, column._1, column._2, column._3, column._4, column._5, column._6, column._7, column._8))
+      ) += (param.competId, param.title, param.content, param.userId, Some(false), Some(LocalDateTime.now), param.editDate, param.delDate)
   }
 
   def update(param: Discussion): Future[Int] = db.run {
     discussion.filter(_.discusId === param.discusId)
-      .map(e => (e.competId, e.title, e.content, e.author, e.subject, e.editDate))
-      .update((param.competId, param.title, param.content, param.author, param.subject, Some(LocalDateTime.now)))
+      .map(e => (e.competId, e.title, e.content, e.userId, e.editDate))
+      .update((param.competId, param.title, param.content, param.userId, Some(LocalDateTime.now)))
   }
 
   def delete(id: Long): Future[Int] = db.run {

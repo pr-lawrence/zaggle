@@ -15,8 +15,7 @@ case class Discussion(discusId: Long
                       , competId: Long
                       , title: String
                       , content: String
-                      , author: String
-                      , subject: String
+                      , userId: Option[Long]
                       , delFlag: Option[Boolean] = Some(false)
                       , regiDate: Option[LocalDateTime] = Some(LocalDateTime.now)
                       , editDate: Option[LocalDateTime]
