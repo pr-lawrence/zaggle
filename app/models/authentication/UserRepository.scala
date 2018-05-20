@@ -72,6 +72,11 @@ class UserRepository @Inject()(dbConfigProvider: DatabaseConfigProvider)(implici
       .headOption
   }
 
+//  def selectByIds(ids: List[Long]): Future[Seq[User]] = db.run {
+//    user.filter(u => ids.exists(u.loginId))
+//      .result
+//  }
+
   def selectByProvider(loginId: String, provider: String): Future[Option[User]] = db.run {
     user.filter(_.loginId === loginId)
       .filter(_.provider === provider)
